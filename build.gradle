@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.61'
+}
+
+group 'syntech'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    goldSaver
+}
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    goldSaver "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation files("libs/BaseMod.jar")
+    implementation files("libs/desktop-1.0.jar")
+    implementation files("libs/ModTheSpire.jar")
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "com.syntech.GoldSaver"
+    }
+
+    from {
+        configurations.goldSaver.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
